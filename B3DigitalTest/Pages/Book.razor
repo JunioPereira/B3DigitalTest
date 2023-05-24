@@ -1,0 +1,30 @@
+﻿@page "/book"
+@using B3DigitalTest.Pages
+
+<PageTitle>Book</PageTitle>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Símbolo</th>
+            <th>Maior preço</th>
+            <th>Menor preço</th>
+            <th>Media preço</th>
+            <th>Media preço 5 segundos</th>
+            <th>Media quantidade</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Quotes.Values)
+        {
+            <tr>
+                <td>@item.Symbol</td>
+                <td>@item.BiggestPrice</td>
+                <td>@item.LowestPrice</td>
+                <td>@item.AveragePrice</td>
+                <td>@item.AveragePrice5Seconds</td>
+                <td>@item.averageQtd</td>
+            </tr>
+        }
+    </tbody>
+</table>
