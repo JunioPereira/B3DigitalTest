@@ -1,5 +1,9 @@
 ﻿using B3DigitalModel;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using System.Collections.Concurrent;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text;
 
 namespace B3DigitalService
 {
@@ -11,9 +15,12 @@ namespace B3DigitalService
 
     public class CalculateBestPrice : ICalculateBestPrice
     {
+        IDistributedCache iDistributedCache { get; }
         ConcurrentDictionary<CriptoType, BidAsk> dicBidAsk { get; set; }
-        public CalculateBestPrice() 
+
+        public CalculateBestPrice(IDistributedCache distributedCache) 
         {
+            iDistributedCache = distributedCache;
             dicBidAsk = new ConcurrentDictionary<CriptoType, BidAsk>();
         }
 
@@ -35,9 +42,9 @@ namespace B3DigitalService
             payload.Quantity = qtd;
             payload.Collection = new List<List<decimal>>();
 
-            if (dicBidAsk.ContainsKey(type)) 
+            if (dicBidAsk.ContainsKey(type))
             {
-                if (side == Side.Buy) 
+                if (side == Side.Buy)
                 {
                     var bidAsk = dicBidAsk[type];
 
@@ -57,7 +64,7 @@ namespace B3DigitalService
 
                             break;
                         }
-                        else 
+                        else
                         {
                             price += item[1] * item[0];
 
@@ -102,6 +109,15 @@ namespace B3DigitalService
 
                     payload.BestPrice = price;
                 }
+                var obj = JsonConvert.SerializeObject(payload);
+
+                var body = Encoding.UTF8.GetBytes(obj);
+
+                iDistributedCache.Set(payload.Id.ToString(), body);
+            }
+            else 
+            {
+                throw new Exception("key not found!");
             }
 
             return payload;

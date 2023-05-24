@@ -14,6 +14,14 @@ builder.Services.AddBlazoredLocalStorage(config =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+builder.Services.AddMemoryCache();
+
+builder.Services.AddStackExchangeRedisCache(op =>
+{
+    op.Configuration = "b3digital.redis.cache.windows.net:6380,password=QEgY8E2XJcLqselULWUy9ta0yg9EkxJG7AzCaCE5CIo=,ssl=True,abortConnect=False";
+});
+
+
 builder.Services.AddHostedService<StartHostedService>();
 builder.Services.AddSingleton<IObservableQuotesInfo, ObservableQuotesInfo>();
 builder.Services.AddSingleton<ICalculateBestPrice, CalculateBestPrice>();
