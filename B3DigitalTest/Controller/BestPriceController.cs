@@ -1,7 +1,6 @@
 ﻿using B3DigitalModel;
 using B3DigitalService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace B3DigitalTest.Controller
 {
@@ -10,12 +9,10 @@ namespace B3DigitalTest.Controller
     public class BestPriceController : ControllerBase
     {
         ICalculateBestPrice iCalculateBestPrice { get; }
-        IDistributedCache iDistributedCache { get; }
 
-        public BestPriceController(ICalculateBestPrice calculateBestPrice, IDistributedCache distributedCache) 
+        public BestPriceController(ICalculateBestPrice calculateBestPrice) 
         {
-            iCalculateBestPrice = calculateBestPrice; 
-            iDistributedCache = distributedCache;
+            iCalculateBestPrice = calculateBestPrice;
         }
 
 
